@@ -4,6 +4,7 @@ package ch.hearc.masrad.swisssearch
 
 import android.content.Intent
 import android.os.AsyncTask
+
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -109,9 +110,8 @@ class MainActivity : AppCompatActivity() {
                 Log.i("TAG", "MainActivity::onPostExecute")
                 Log.i("TAG", "MainActivity::onPostExecute " + result.toString())
 
-
-
-
+                val ListActivity = Intent(this@MainActivity, ListActivity::class.java)
+                startActivity(ListActivity)
 
                 val jSONObject = JSONObject(result)
                 println(jSONObject)
@@ -127,10 +127,6 @@ class MainActivity : AppCompatActivity() {
                 println(chf)
                 val czk = newJsonObject.getString("CZK")
                 val tl = newJsonObject.getString("TRY")
-
-                val ListActivity = Intent(this@MainActivity, ListActivity::class.java)
-                intent.putExtra("name",result)
-                startActivity(ListActivity)
 
 
             } catch (e: Exception) {
