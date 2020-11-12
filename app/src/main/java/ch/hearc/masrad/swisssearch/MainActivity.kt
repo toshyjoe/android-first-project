@@ -9,11 +9,16 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
+import android.util.Xml
 import android.view.View
 import android.widget.Button
 import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
 import org.json.JSONObject
+import org.xmlpull.v1.XmlPullParser
+import org.xmlpull.v1.XmlPullParserException
+import java.io.IOException
+import java.io.InputStream
 import java.io.InputStreamReader
 import java.net.HttpURLConnection
 import java.net.URL
@@ -74,7 +79,10 @@ class MainActivity : AppCompatActivity() {
 
         override fun doInBackground(vararg p0: String?): String {
 
-            var result = ""
+            val ns: String? = null
+            //data class Entry(val title: String?, val summary: String?, val link: String?)
+            data class Entry(val title: String?)
+            //var result = ""
             var url: URL
             val httpURLConnection: HttpURLConnection
 
@@ -83,24 +91,109 @@ class MainActivity : AppCompatActivity() {
                 url = URL(p0[0])
                 httpURLConnection = url.openConnection() as HttpURLConnection
                 val inputStream = httpURLConnection.inputStream
-                val inputStreamReader = InputStreamReader(inputStream)
+                //val inputStreamReader = InputStreamReader(inputStream)
 
-                var data = inputStreamReader.read()
+                @Throws(XmlPullParserException::class, IOException::class)
+                    fun parse(inputStream: InputStream): List<*> {
+                        inputStream.use { inputStream ->
+                            val parser: XmlPullParser = Xml.newPullParser()
+                            parser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, false)
+                            parser.setInput(inputStream, null)
+                            parser.nextTag()
+                            return readFeed(parser)
+                        }
+                    }
 
-                while (data > 0) {
-                    val character = data.toChar()
-                    result += character
-                    data = inputStreamReader.read()
 
-                }
+                    fun readFeed(parser: XmlPullParser): List<Entry> {
+                        val entries = mutableListOf<Entry>()
 
-                return result
+                        parser.require(XmlPullParser.START_TAG, ns, "feed")
+                        while (parser.next() != XmlPullParser.END_TAG) {
+                            if (parser.eventType != XmlPullParser.START_TAG) {
+                                continue
+                            }
+                            // Starts by looking for the entry tag
+                            if (parser.name == "entry") {
+                                entries.add(readEntry(parser))
+                            } else {
+                                skip(parser)
+                            }
+                        }
+                        return entries
+                    }
+
+                    fun readEntry(parser: XmlPullParser): Entry {
+                        parser.require(XmlPullParser.START_TAG, ns, "entry")
+                        var title: String? = null
+                        while (parser.next() != XmlPullParser.END_TAG) {
+                            if (parser.eventType != XmlPullParser.START_TAG) {
+                                continue
+                            }
+                            when (parser.name) {
+                                "title" -> title = readTitle(parser)
+                                else -> skip(parser)
+                            }
+                        }
+                        return Entry(title)
+                    }
+
+                    fun readTitle(parser: XmlPullParser): String {
+                        parser.require(XmlPullParser.START_TAG, ns, "title")
+                        val title = readText(parser)
+                        parser.require(XmlPullParser.END_TAG, ns, "title")
+                        return title
+                    }
+
+                    fun readText(parser: XmlPullParser): String {
+                        var result = ""
+                        if (parser.next() == XmlPullParser.TEXT) {
+                            result = parser.text
+                            parser.nextTag()
+                        }
+                        return result
+                    }
+
+                    fun skip(parser: XmlPullParser) {
+                        if (parser.eventType != XmlPullParser.START_TAG) {
+                            throw IllegalStateException()
+                        }
+                        var depth = 1
+                        while (depth != 0) {
+                            when (parser.next()) {
+                                XmlPullParser.END_TAG -> depth--
+                                XmlPullParser.START_TAG -> depth++
+                            }
+                        }
+                    }
+
+
+
+
             } catch (e: Exception) {
                 e.printStackTrace()
-                return result
 
             }
 
+        }
+
+        @Throws(XmlPullParserException::class, IOException::class)
+        private fun readFeed(parser: XmlPullParser): List<Entry> {
+            val entries = mutableListOf<Entry>()
+
+            parser.require(XmlPullParser.START_TAG, ns, "feed")
+            while (parser.next() != XmlPullParser.END_TAG) {
+                if (parser.eventType != XmlPullParser.START_TAG) {
+                    continue
+                }
+                // Starts by looking for the entry tag
+                if (parser.name == "entry") {
+                    entries.add(readEntry(parser))
+                } else {
+                    skip(parser)
+                }
+            }
+            return entries
         }
 
         override fun onPostExecute(result: String?) {
