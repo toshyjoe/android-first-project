@@ -76,12 +76,12 @@ class MainActivity : AppCompatActivity() {
     }
 
     inner class Download : AsyncTask<String, Void, String>() {
-
+        private val ns: String? = null
         override fun doInBackground(vararg p0: String?): String {
 
-            val ns: String? = null
+
             //data class Entry(val title: String?, val summary: String?, val link: String?)
-            data class Entry(val title: String?)
+
             //var result = ""
             var url: URL
             val httpURLConnection: HttpURLConnection
@@ -105,76 +105,11 @@ class MainActivity : AppCompatActivity() {
                     }
 
 
-                    fun readFeed(parser: XmlPullParser): List<Entry> {
-                        val entries = mutableListOf<Entry>()
-
-                        parser.require(XmlPullParser.START_TAG, ns, "feed")
-                        while (parser.next() != XmlPullParser.END_TAG) {
-                            if (parser.eventType != XmlPullParser.START_TAG) {
-                                continue
-                            }
-                            // Starts by looking for the entry tag
-                            if (parser.name == "entry") {
-                                entries.add(readEntry(parser))
-                            } else {
-                                skip(parser)
-                            }
-                        }
-                        return entries
-                    }
-
-                    fun readEntry(parser: XmlPullParser): Entry {
-                        parser.require(XmlPullParser.START_TAG, ns, "entry")
-                        var title: String? = null
-                        while (parser.next() != XmlPullParser.END_TAG) {
-                            if (parser.eventType != XmlPullParser.START_TAG) {
-                                continue
-                            }
-                            when (parser.name) {
-                                "title" -> title = readTitle(parser)
-                                else -> skip(parser)
-                            }
-                        }
-                        return Entry(title)
-                    }
-
-                    fun readTitle(parser: XmlPullParser): String {
-                        parser.require(XmlPullParser.START_TAG, ns, "title")
-                        val title = readText(parser)
-                        parser.require(XmlPullParser.END_TAG, ns, "title")
-                        return title
-                    }
-
-                    fun readText(parser: XmlPullParser): String {
-                        var result = ""
-                        if (parser.next() == XmlPullParser.TEXT) {
-                            result = parser.text
-                            parser.nextTag()
-                        }
-                        return result
-                    }
-
-                    fun skip(parser: XmlPullParser) {
-                        if (parser.eventType != XmlPullParser.START_TAG) {
-                            throw IllegalStateException()
-                        }
-                        var depth = 1
-                        while (depth != 0) {
-                            when (parser.next()) {
-                                XmlPullParser.END_TAG -> depth--
-                                XmlPullParser.START_TAG -> depth++
-                            }
-                        }
-                    }
-
-
-
-
             } catch (e: Exception) {
                 e.printStackTrace()
 
             }
-
+            return
         }
 
         @Throws(XmlPullParserException::class, IOException::class)
@@ -194,6 +129,51 @@ class MainActivity : AppCompatActivity() {
                 }
             }
             return entries
+        }
+
+        @Throws(XmlPullParserException::class, IOException::class)
+        fun readEntry(parser: XmlPullParser): Entry {
+            parser.require(XmlPullParser.START_TAG, ns, "entry")
+            var title: String? = null
+            while (parser.next() != XmlPullParser.END_TAG) {
+                if (parser.eventType != XmlPullParser.START_TAG) {
+                    continue
+                }
+                when (parser.name) {
+                    "title" -> title = readTitle(parser)
+                    else -> skip(parser)
+                }
+            }
+            return Entry(title)
+        }
+        @Throws(XmlPullParserException::class, IOException::class)
+        fun readTitle(parser: XmlPullParser): String {
+            parser.require(XmlPullParser.START_TAG, ns, "title")
+            val title = readText(parser)
+            parser.require(XmlPullParser.END_TAG, ns, "title")
+            return title
+        }
+        @Throws(XmlPullParserException::class, IOException::class)
+        fun readText(parser: XmlPullParser): String {
+            var result = ""
+            if (parser.next() == XmlPullParser.TEXT) {
+                result = parser.text
+                parser.nextTag()
+            }
+            return result
+        }
+        @Throws(XmlPullParserException::class, IOException::class)
+        fun skip(parser: XmlPullParser) {
+            if (parser.eventType != XmlPullParser.START_TAG) {
+                throw IllegalStateException()
+            }
+            var depth = 1
+            while (depth != 0) {
+                when (parser.next()) {
+                    XmlPullParser.END_TAG -> depth--
+                    XmlPullParser.START_TAG -> depth++
+                }
+            }
         }
 
         override fun onPostExecute(result: String?) {
@@ -256,3 +236,5 @@ class MainActivity : AppCompatActivity() {
         println("MainActivity::onDestroy()")
     }
 }
+
+data class Entry(val title: String?)
