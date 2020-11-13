@@ -2,9 +2,7 @@
 
 package ch.hearc.masrad.swisssearch
 
-import android.content.Intent
 import android.os.AsyncTask
-
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -14,12 +12,10 @@ import android.view.View
 import android.widget.Button
 import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
-import org.json.JSONObject
 import org.xmlpull.v1.XmlPullParser
 import org.xmlpull.v1.XmlPullParserException
 import java.io.IOException
 import java.io.InputStream
-import java.io.InputStreamReader
 import java.net.HttpURLConnection
 import java.net.URL
 
@@ -78,10 +74,11 @@ class MainActivity : AppCompatActivity() {
     data class Entry(val title: String?)
     inner class Download : AsyncTask<String, Void, String>() {
 
-
+        var listNames = ArrayList<String>()
 
         @Throws(XmlPullParserException::class, IOException::class)
         fun skip(parser: XmlPullParser) {
+            Log.i("TAG", "MainActivity::doInBackground => skip ")
             if (parser.eventType != XmlPullParser.START_TAG) {
                 throw IllegalStateException()
             }
@@ -96,36 +93,53 @@ class MainActivity : AppCompatActivity() {
 
         @Throws(IOException::class, XmlPullParserException::class)
         fun readText(parser: XmlPullParser): String {
-            var result = ""
+            Log.i("TAG", "MainActivity::doInBackground => readText ")
+
+            var result: String = ""
+
             if (parser.next() == XmlPullParser.TEXT) {
                 result = parser.text
+                listNames.add(parser.text)
+                Log.i("TAG", "MainActivity::doInBackground => readText var " + result)
                 parser.nextTag()
             }
+            //return result
+            Log.i("TAG", "MainActivity::doInBackground => readText listName " + listNames)
             return result
+
         }
 
         @Throws(IOException::class, XmlPullParserException::class)
         fun readTitle(parser: XmlPullParser): String {
+            Log.i("TAG", "MainActivity::doInBackground => readTitle ")
             parser.require(XmlPullParser.START_TAG, null, "title")
             val title = readText(parser)
+            Log.i("TAG", "MainActivity::doInBackground => readTitle val " + title)
             parser.require(XmlPullParser.END_TAG, null, "title")
             return title
         }
 
         @Throws(XmlPullParserException::class, IOException::class)
         fun readEntry(parser: XmlPullParser): Entry {
+            Log.i("TAG", "MainActivity::doInBackground => readEntry ")
+            Log.i("TAG", "MainActivity::doInBackground => readEntry::parse " + parser)
+
             parser.require(XmlPullParser.START_TAG, null, "entry")
             var title: String? = null
             while (parser.next() != XmlPullParser.END_TAG) {
+                Log.i("TAG", "MainActivity::doInBackground => readEntry::parse::while " + parser.name)
                 if (parser.eventType != XmlPullParser.START_TAG) {
                     continue
                 }
                 when (parser.name) {
                     "title" -> title = readTitle(parser)
                     else -> skip(parser)
+
                 }
+                Log.i("TAG", "MainActivity::doInBackground => readEntry::parse::when " + title)
             }
             return Entry(title)
+
         }
 
 
@@ -133,19 +147,25 @@ class MainActivity : AppCompatActivity() {
         fun readFeed(parser: XmlPullParser): List<Entry> {
             val entries = mutableListOf<Entry>()
 
+            Log.i("TAG", "MainActivity::doInBackground => readFeed " + entries)
+            Log.i("TAG", "MainActivity::doInBackground => readFeed::parser " + parser)
             parser.require(XmlPullParser.START_TAG, null, "feed")
             while (parser.next() != XmlPullParser.END_TAG) {
+                Log.i("TAG", "MainActivity::doInBackground => readFeed::parser::while " + parser.name)
                 if (parser.eventType != XmlPullParser.START_TAG) {
                     continue
                 }
                 // Starts by looking for the entry tag
                 if (parser.name == "entry") {
                     entries.add(readEntry(parser))
+                    Log.i("TAG", "MainActivity::doInBackground => readFeed::parser::while => Tag =  " + parser.name)
+                    Log.i("TAG", "MainActivity::doInBackground => readFeed::parser::while =>  " + entries)
                 } else {
                     skip(parser)
                 }
             }
             return entries
+
         }
 
         @Throws(XmlPullParserException::class, IOException::class)
@@ -155,7 +175,7 @@ class MainActivity : AppCompatActivity() {
                 parser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, false)
                 parser.setInput(inputStream, null)
                 parser.nextTag()
-                Log.i("TAG", "MainActivity::doInBackground => pars ")
+                Log.i("TAG", "MainActivity::doInBackground => parse " + inputStream)
                 return readFeed(parser)
             }
         }
@@ -166,22 +186,14 @@ class MainActivity : AppCompatActivity() {
 
             var url: URL
             val httpURLConnection: HttpURLConnection
-
-
-
-
-
             url = URL(p0[0])
             Log.i("TAG", "MainActivity::doInBackground => url " + url)
             httpURLConnection = url.openConnection() as HttpURLConnection
             val inputStream = httpURLConnection.inputStream
-
-
+            Log.i("TAG", "MainActivity::doInBackground => inputStream " + inputStream)
             parse(inputStream)
 
-
-            return "hello"
-
+            return ""
 
 
         }
@@ -189,23 +201,17 @@ class MainActivity : AppCompatActivity() {
         override fun onPostExecute(result: String?) {
             super.onPostExecute(result)
 
+
+
+            Log.i("TAG", "MainActivity::onPostExecute " + listNames)
+
+
             try {
 
-                val jSONObject = JSONObject(result)
-                println(jSONObject)
-                val base = jSONObject.getString("base")
-                println(base)
-                val date = jSONObject.getString("date")
-                println(date)
-                val rates = jSONObject.getString("rates")
-                println(rates)
 
-                val newJsonObject = JSONObject(rates)
-                val chf = newJsonObject.getString("CHF")
-                println(chf)
-                val czk = newJsonObject.getString("CZK")
-                val tl = newJsonObject.getString("TRY")
-
+                //val intent =
+                  //  Intent(this@MainActivity, ListActivity::class.java)
+                    //startActivity(intent)
 
             } catch (e: Exception) {
 
