@@ -217,8 +217,9 @@ class MainActivity : AppCompatActivity() {
                 listView.onItemClickListener = AdapterView.OnItemClickListener { parent, view, position, id ->
                     Log.i("MainActivity", "index:")
                     val intent = Intent(applicationContext, DetailActivity::class.java)
-                    //intent.putExtra("name",imagesNames[position])
-                    //intent.putExtra("image",imageIds[position])
+
+                    intent.putExtra("name",listNames[position])
+
                     startActivity(intent)
                 }
         }
