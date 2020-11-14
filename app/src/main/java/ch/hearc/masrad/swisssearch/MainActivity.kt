@@ -9,9 +9,11 @@ import android.text.TextWatcher
 import android.util.Log
 import android.util.Xml
 import android.view.View
+import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
+import kotlinx.android.synthetic.main.activity_list.*
 import org.xmlpull.v1.XmlPullParser
 import org.xmlpull.v1.XmlPullParserException
 import java.io.IOException
@@ -209,8 +211,8 @@ class MainActivity : AppCompatActivity() {
             try {
 
 
-
-
+                val adapter = ArrayAdapter<String>(this@MainActivity,android.R.layout.simple_expandable_list_item_1, listNames)
+                listView.adapter = adapter
 
 
             } catch (e: Exception) {
