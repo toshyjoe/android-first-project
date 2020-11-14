@@ -2,6 +2,7 @@
 
 package ch.hearc.masrad.swisssearch
 
+import android.content.Intent
 import android.os.AsyncTask
 import android.os.Bundle
 import android.text.Editable
@@ -9,11 +10,12 @@ import android.text.TextWatcher
 import android.util.Log
 import android.util.Xml
 import android.view.View
+import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
-import kotlinx.android.synthetic.main.activity_list.*
+import kotlinx.android.synthetic.main.activity_main.*
 import org.xmlpull.v1.XmlPullParser
 import org.xmlpull.v1.XmlPullParserException
 import java.io.IOException
@@ -208,18 +210,17 @@ class MainActivity : AppCompatActivity() {
             Log.i("TAG", "MainActivity::onPostExecute " + listNames)
 
 
-            try {
 
 
                 val adapter = ArrayAdapter<String>(this@MainActivity,android.R.layout.simple_expandable_list_item_1, listNames)
                 listView.adapter = adapter
-
-
-            } catch (e: Exception) {
-
-                e.printStackTrace()
-
-            }
+                listView.onItemClickListener = AdapterView.OnItemClickListener { parent, view, position, id ->
+                    Log.i("MainActivity", "index:")
+                    val intent = Intent(applicationContext, DetailActivity::class.java)
+                    //intent.putExtra("name",imagesNames[position])
+                    //intent.putExtra("image",imageIds[position])
+                    startActivity(intent)
+                }
         }
     }
 }
