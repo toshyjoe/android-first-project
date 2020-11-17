@@ -32,5 +32,14 @@
             android:textSize="14sp"
             android:text="location"
             />
+
+        <TextView
+            android:id="@+id/address_city_2_txt"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+            android:textSize="14sp"
+            android:text="city" />
+
     </LinearLayout>
 </LinearLayout>

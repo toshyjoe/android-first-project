@@ -66,9 +66,9 @@ class MainActivity : AppCompatActivity() {
             }
 
             vh.address_name_txt.text = addressList[position].name
-            vh.address_city_txt.text = addressList[position].city
-
-            return view
+            vh.address_city_txt.text = addressList[position].street + " " + addressList[position].streetNo
+            vh.address_city_2_txt.text = addressList[position].zip + " " + addressList[position].city
+                    return view
 
         }
 
@@ -140,7 +140,7 @@ class MainActivity : AppCompatActivity() {
 
     inner class Download : AsyncTask<String, Void, String>() {
 
-        var listNames = ArrayList<String>()
+        //var listNames = ArrayList<String>()
         var listAddresses = ArrayList<Address>()
 
 
@@ -164,18 +164,14 @@ class MainActivity : AppCompatActivity() {
             //Log.i("TAG", "MainActivity::doInBackground => readText ")
 
             var result: String = ""
-
             if (parser.next() == XmlPullParser.TEXT) {
                 result = parser.text
-                listNames.add(parser.text)
-
-
-
+                //listNames.add(parser.text)
                 Log.i("TAG", "MainActivity::doInBackground => readText var " + result)
                 parser.nextTag()
             }
             //return result
-            Log.i("TAG", "MainActivity::doInBackground => readText listName " + listNames)
+            //Log.i("TAG", "MainActivity::doInBackground => readText listName " + listNames)
             return result
 
         }
@@ -183,6 +179,7 @@ class MainActivity : AppCompatActivity() {
         @Throws(IOException::class, XmlPullParserException::class)
         fun readCity(parser: XmlPullParser): String {
             parser.require(XmlPullParser.START_TAG, null, "tel:city")
+
             val city = readText(parser)
             parser.require(XmlPullParser.END_TAG, null, "tel:city")
             return city
@@ -216,6 +213,26 @@ class MainActivity : AppCompatActivity() {
             return phone
         }
 
+        @Throws(IOException::class, XmlPullParserException::class)
+        fun readStreet(parser: XmlPullParser): String {
+            Log.i("TAG", "MainActivity::doInBackground => readStreet ")
+            parser.require(XmlPullParser.START_TAG, null, "tel:street")
+            val street = readText(parser)
+            Log.i("TAG", "MainActivity::doInBackground => readStreet val " + street)
+            parser.require(XmlPullParser.END_TAG, null, "tel:street")
+            return street
+        }
+
+        @Throws(IOException::class, XmlPullParserException::class)
+        fun readStreetNo(parser: XmlPullParser): String {
+            Log.i("TAG", "MainActivity::doInBackground => readStreetNo ")
+            parser.require(XmlPullParser.START_TAG, null, "tel:streetno")
+            val streetNo = readText(parser)
+            Log.i("TAG", "MainActivity::doInBackground => readStreet val " + streetNo)
+            parser.require(XmlPullParser.END_TAG, null, "tel:streetno")
+            return streetNo
+        }
+
         @Throws(XmlPullParserException::class, IOException::class)
         fun readEntry(parser: XmlPullParser): Entry {
             Log.i("TAG", "MainActivity::doInBackground => readEntry ")
@@ -225,6 +242,8 @@ class MainActivity : AppCompatActivity() {
 
             parser.require(XmlPullParser.START_TAG, null, "entry")
             var title: String? = null
+            var street: String? = null
+            var streetNo: String? = null
             var phone: String? = null
             var zip: String? = null
             var city: String? = null
@@ -235,6 +254,8 @@ class MainActivity : AppCompatActivity() {
                 }
                 when (parser.name) {
                     "title" -> title = readTitle(parser)
+                    "tel:street" -> street = readStreet(parser)
+                    "tel:streetno" -> streetNo = readStreetNo(parser)
                     "tel:phone" -> phone = readPhone(parser)
                     "tel:zip" -> zip = readZip(parser)
                     "tel:city" -> city = readCity(parser)
@@ -245,9 +266,9 @@ class MainActivity : AppCompatActivity() {
                 //Log.i("TAG", "MainActivity::doInBackground => readEntry::parse::when readPhone :::::::: "  + phone)
             }
             //return Entry(title, phone)
-            newAddress = Address(1, title, phone, zip, city)
+            newAddress = Address(1, title, street, streetNo, phone, zip, city)
             listAddresses.add(newAddress)
-
+            Log.i("TAG", "MainActivity::doInBackground => readEntry::parse::when:::List " + listAddresses)
             return Entry(title)
 
         }
@@ -313,7 +334,7 @@ class MainActivity : AppCompatActivity() {
             super.onPostExecute(result)
 
 
-            Log.i("TAG", "MainActivity::onPostExecute " + listNames)
+            Log.i("TAG", "MainActivity::onPostExecute ")
 
 
                 //val adapter = ArrayAdapter<String>(this@MainActivity,android.R.layout.simple_expandable_list_item_1, listNames)
@@ -345,10 +366,12 @@ class MainActivity : AppCompatActivity() {
     private class  ViewHolder(view : View?) {
         val address_name_txt: TextView
         val address_city_txt: TextView
+        val address_city_2_txt: TextView
 
         init {
             this.address_name_txt = view?.findViewById(R.id.address_name_txt) as TextView
             this.address_city_txt = view?.findViewById(R.id.address_city_txt) as TextView
+            this.address_city_2_txt = view?.findViewById(R.id.address_city_2_txt) as TextView
         }
     }
 }
