@@ -176,61 +176,13 @@ class MainActivity : AppCompatActivity() {
 
         }
 
-        @Throws(IOException::class, XmlPullParserException::class)
-        fun readCity(parser: XmlPullParser): String {
-            parser.require(XmlPullParser.START_TAG, null, "tel:city")
-
-            val city = readText(parser)
-            parser.require(XmlPullParser.END_TAG, null, "tel:city")
-            return city
-        }
 
         @Throws(IOException::class, XmlPullParserException::class)
-        fun readZip(parser: XmlPullParser): String {
-            parser.require(XmlPullParser.START_TAG, null, "tel:zip")
-            val zip = readText(parser)
-            parser.require(XmlPullParser.END_TAG, null, "tel:zip")
-            return zip
-        }
-
-        @Throws(IOException::class, XmlPullParserException::class)
-        fun readTitle(parser: XmlPullParser): String {
-            Log.i("TAG", "MainActivity::doInBackground => readTitle ")
-            parser.require(XmlPullParser.START_TAG, null, "title")
+        fun readTag(parser: XmlPullParser, tagName: String): String {
+            parser.require(XmlPullParser.START_TAG, null, tagName)
             val title = readText(parser)
-            Log.i("TAG", "MainActivity::doInBackground => readTitle val " + title)
-            parser.require(XmlPullParser.END_TAG, null, "title")
+            parser.require(XmlPullParser.END_TAG, null, tagName)
             return title
-        }
-
-        @Throws(IOException::class, XmlPullParserException::class)
-        fun readPhone(parser: XmlPullParser): String {
-            Log.i("TAG", "MainActivity::doInBackground => readPhone ")
-            parser.require(XmlPullParser.START_TAG, null, "tel:phone")
-            val phone = readText(parser)
-            Log.i("TAG", "MainActivity::doInBackground => readPhone val " + phone)
-            parser.require(XmlPullParser.END_TAG, null, "tel:phone")
-            return phone
-        }
-
-        @Throws(IOException::class, XmlPullParserException::class)
-        fun readStreet(parser: XmlPullParser): String {
-            Log.i("TAG", "MainActivity::doInBackground => readStreet ")
-            parser.require(XmlPullParser.START_TAG, null, "tel:street")
-            val street = readText(parser)
-            Log.i("TAG", "MainActivity::doInBackground => readStreet val " + street)
-            parser.require(XmlPullParser.END_TAG, null, "tel:street")
-            return street
-        }
-
-        @Throws(IOException::class, XmlPullParserException::class)
-        fun readStreetNo(parser: XmlPullParser): String {
-            Log.i("TAG", "MainActivity::doInBackground => readStreetNo ")
-            parser.require(XmlPullParser.START_TAG, null, "tel:streetno")
-            val streetNo = readText(parser)
-            Log.i("TAG", "MainActivity::doInBackground => readStreet val " + streetNo)
-            parser.require(XmlPullParser.END_TAG, null, "tel:streetno")
-            return streetNo
         }
 
         @Throws(XmlPullParserException::class, IOException::class)
@@ -253,12 +205,12 @@ class MainActivity : AppCompatActivity() {
                     continue
                 }
                 when (parser.name) {
-                    "title" -> title = readTitle(parser)
-                    "tel:street" -> street = readStreet(parser)
-                    "tel:streetno" -> streetNo = readStreetNo(parser)
-                    "tel:phone" -> phone = readPhone(parser)
-                    "tel:zip" -> zip = readZip(parser)
-                    "tel:city" -> city = readCity(parser)
+                    "title" -> title = readTag(parser, "title")
+                    "tel:street" -> street = readTag(parser, "tel:street")
+                    "tel:streetno" -> streetNo = readTag(parser, "tel:streetno" )
+                    "tel:phone" -> phone = readTag(parser, "tel:phone")
+                    "tel:zip" -> zip = readTag(parser, "tel:zip")
+                    "tel:city" -> city = readTag(parser, "tel:city")
                     else -> skip(parser)
                 }
 
