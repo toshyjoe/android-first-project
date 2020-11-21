@@ -295,7 +295,7 @@ class MainActivity : AppCompatActivity() {
 
                 listView.adapter = addressAdapter
                 listView.onItemClickListener = AdapterView.OnItemClickListener { adapterView, view, position, id ->
-                    val intent = Intent(applicationContext, DetailActivity::class.java)
+                    val intent = Intent(applicationContext, MapActivity::class.java)
                     startActivity(intent)
 
                 /*
