@@ -16,3 +16,4 @@ class DetailActivity : AppCompatActivity() {
 
     }
 }
+
