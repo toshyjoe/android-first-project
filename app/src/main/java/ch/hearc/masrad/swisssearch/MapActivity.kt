@@ -18,7 +18,7 @@ import org.osmdroid.views.MapView
      private val TAG = MapActivity::class.java.simpleName
 
 
-     private val REQUEST_PERMISSIONS_REQUEST_CODE = 1
+     //private val REQUEST_PERMISSIONS_REQUEST_CODE = 1
      lateinit var map: MapView
 
 
@@ -32,7 +32,12 @@ import org.osmdroid.views.MapView
         map = findViewById(R.id.map)
         map.setTileSource(TileSourceFactory.MAPNIK)
 
+        val controller = map.controller
 
+        val mapPoint = GeoPoint (46.99783873042332, 6.938756785005269)
+
+        controller.setZoom(9.5)
+        controller.setCenter(mapPoint)
 
     }
 }
