@@ -1,7 +1,10 @@
  package ch.hearc.masrad.swisssearch
 
+import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.preference.PreferenceActivity
+import android.preference.PreferenceManager
 import android.util.Log
 import org.osmdroid.api.IMapController
 import org.osmdroid.config.Configuration
@@ -12,36 +15,24 @@ import org.osmdroid.views.MapView
 
 
  class MapActivity : AppCompatActivity() {
-
      private val TAG = MapActivity::class.java.simpleName
 
 
+     private val REQUEST_PERMISSIONS_REQUEST_CODE = 1
+     lateinit var map: MapView
 
-
-
-     lateinit var mMap: MapView // xml
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_map)
-        Log.i("TAG", "MapActivity")
-        // mMap = binding.mapView
 
-        mMap.setTileSource(TileSourceFactory.MAPNIK) // map
-        Log.i("TAG", "mMap.setTileSource")
+        var ctx = applicationContext
 
-        Configuration.getInstance().load(applicationContext, getSharedPreferences( "phoneBook app", MODE_PRIVATE))
+        Configuration.getInstance().load(ctx, androidx.preference.PreferenceManager.getDefaultSharedPreferences(ctx))
+        map = findViewById(R.id.map)
+        map.setTileSource(TileSourceFactory.MAPNIK)
 
-        val longitude: Double = intent.getDoubleExtra("Longitude", 36.7783)
-        val latitude: Double = intent.getDoubleExtra("Latitude", 119.4179)
 
-        //mMap = binding.mapView
-
-        val controller: IMapController? = mMap.controller
-
-        val mapPoint = GeoPoint(longitude,latitude)
-        controller?.setZoom(9.5)
-        controller?.setCenter(mapPoint)
 
     }
 }
