@@ -10,8 +10,11 @@ class DetailActivity : AppCompatActivity() {
         setContentView(R.layout.activity_detail)
 
         val intent = intent
-        val inputAddress: Address = intent.getSerializableExtra("sampleObject") as Address
-        activity_detail_name_txt.text = inputAddress.name
+        val inputAddress = intent.getParcelableExtra<Address>("extra_address")
+
+        if (inputAddress != null) {
+            activity_detail_name_txt.text = inputAddress.name
+        }
 
 
     }

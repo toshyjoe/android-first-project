@@ -6,6 +6,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.AsyncTask
 import android.os.Bundle
+import android.os.Parcelable
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
@@ -285,17 +286,25 @@ class MainActivity : AppCompatActivity() {
         override fun onPostExecute(result: String?) {
             super.onPostExecute(result)
 
-
             Log.i("TAG", "MainActivity::onPostExecute ")
 
 
                 //val adapter = ArrayAdapter<String>(this@MainActivity,android.R.layout.simple_expandable_list_item_1, listNames)
-
                 val addressAdapter = AddressAdapter(this@MainActivity, listAddresses)
 
                 listView.adapter = addressAdapter
                 listView.onItemClickListener = AdapterView.OnItemClickListener { adapterView, view, position, id ->
+
+
                     val intent = Intent(applicationContext, DetailActivity::class.java)
+
+                    val itemAtPosition : Address
+                    itemAtPosition =  (Address) adapterView.getItemAtPosition(position)
+
+                    Log.i("TAG", "MainActivity::onPostExecute :: get item at position : " + itemAtPosition.name)
+
+
+                    intent.putExtra("extra_address", itemAtPosition)
                     startActivity(intent)
 
                 /*
@@ -327,5 +336,6 @@ class MainActivity : AppCompatActivity() {
         }
     }
 }
+
 
 
