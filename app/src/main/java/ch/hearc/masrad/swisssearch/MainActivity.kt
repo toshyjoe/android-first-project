@@ -301,6 +301,7 @@ class MainActivity : AppCompatActivity() {
                 listView.adapter = addressAdapter
                 listView.onItemClickListener = AdapterView.OnItemClickListener { adapterView, view, position, id ->
 
+
                     val intent = Intent(applicationContext, DetailActivity::class.java)
 
                     val itemAtPosition : Address
@@ -311,6 +312,7 @@ class MainActivity : AppCompatActivity() {
 
 
                     intent.putExtra("extra_address", itemAtPosition)
+
                     startActivity(intent)
 
 
