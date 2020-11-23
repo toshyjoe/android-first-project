@@ -6,14 +6,17 @@ import android.content.Context
 import android.content.Intent
 import android.os.AsyncTask
 import android.os.Bundle
-import android.os.Parcelable
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.util.Xml
 import android.view.View
 import android.view.ViewGroup
-import android.widget.*
+import android.widget.AdapterView
+import android.widget.BaseAdapter
+import android.widget.Button
+import android.widget.EditText
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_main.*
 import org.xmlpull.v1.XmlPullParser
@@ -22,8 +25,6 @@ import java.io.IOException
 import java.io.InputStream
 import java.net.HttpURLConnection
 import java.net.URL
-import android.widget.AdapterView
-
 
 
 class MainActivity : AppCompatActivity() {
@@ -119,7 +120,7 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    fun search (view: View){
+    fun search(view: View){
         Log.i("TAG", "MainActivity::search")
         val downloadData = Download()
         try {
@@ -127,7 +128,7 @@ class MainActivity : AppCompatActivity() {
             val key = "&key=139e1566337f93a78344eec754ce94ca"
             val url = "https://tel.search.ch/api/?was="
             val chosenBase = mNameInput.text.toString()
-            downloadData.execute(url+chosenBase+key)
+            downloadData.execute(url + chosenBase + key)
         } catch (e: Exception){
             e.printStackTrace()
         }
@@ -201,14 +202,15 @@ class MainActivity : AppCompatActivity() {
             var zip: String? = null
             var city: String? = null
             while (parser.next() != XmlPullParser.END_TAG) {
-                Log.i("TAG", "MainActivity::doInBackground => readEntry::parse::while " + parser.name)
+                Log.i("TAG",
+                    "MainActivity::doInBackground => readEntry::parse::while " + parser.name)
                 if (parser.eventType != XmlPullParser.START_TAG) {
                     continue
                 }
                 when (parser.name) {
                     "title" -> title = readTag(parser, "title")
                     "tel:street" -> street = readTag(parser, "tel:street")
-                    "tel:streetno" -> streetNo = readTag(parser, "tel:streetno" )
+                    "tel:streetno" -> streetNo = readTag(parser, "tel:streetno")
                     "tel:phone" -> phone = readTag(parser, "tel:phone")
                     "tel:zip" -> zip = readTag(parser, "tel:zip")
                     "tel:city" -> city = readTag(parser, "tel:city")
@@ -221,9 +223,9 @@ class MainActivity : AppCompatActivity() {
             //return Entry(title, phone)
             newAddress = Address(1, title, street, streetNo, phone, zip, city)
             listAddresses.add(newAddress)
-            Log.i("TAG", "MainActivity::doInBackground => readEntry::parse::when:::List " + listAddresses)
+            Log.i("TAG",
+                "MainActivity::doInBackground => readEntry::parse::when:::List " + listAddresses)
             return Entry(title)
-
         }
 
 
@@ -235,15 +237,18 @@ class MainActivity : AppCompatActivity() {
             Log.i("TAG", "MainActivity::doInBackground => readFeed::parser " + parser)
             parser.require(XmlPullParser.START_TAG, null, "feed")
             while (parser.next() != XmlPullParser.END_TAG) {
-                Log.i("TAG", "MainActivity::doInBackground => readFeed::parser::while " + parser.name)
+                Log.i("TAG",
+                    "MainActivity::doInBackground => readFeed::parser::while " + parser.name)
                 if (parser.eventType != XmlPullParser.START_TAG) {
                     continue
                 }
                 // Starts by looking for the entry tag
                 if (parser.name == "entry") {
                     entries.add(readEntry(parser))
-                    Log.i("TAG", "MainActivity::doInBackground => readFeed::parser::while => Tag =  " + parser.name)
-                    Log.i("TAG", "MainActivity::doInBackground => readFeed::parser::while =>  " + entries)
+                    Log.i("TAG",
+                        "MainActivity::doInBackground => readFeed::parser::while => Tag =  " + parser.name)
+                    Log.i("TAG",
+                        "MainActivity::doInBackground => readFeed::parser::while =>  " + entries)
                 } else {
                     skip(parser)
                 }
@@ -290,23 +295,26 @@ class MainActivity : AppCompatActivity() {
 
 
                 //val adapter = ArrayAdapter<String>(this@MainActivity,android.R.layout.simple_expandable_list_item_1, listNames)
+
                 val addressAdapter = AddressAdapter(this@MainActivity, listAddresses)
 
                 listView.adapter = addressAdapter
                 listView.onItemClickListener = AdapterView.OnItemClickListener { adapterView, view, position, id ->
 
-
                     val intent = Intent(applicationContext, DetailActivity::class.java)
 
                     val itemAtPosition : Address
-                    itemAtPosition =  (Address) adapterView.getItemAtPosition(position)
+                    itemAtPosition =  adapterView.getItemAtPosition(position) as Address
 
-                    Log.i("TAG", "MainActivity::onPostExecute :: get item at position : " + itemAtPosition.name)
+                    Log.i("TAG",
+                        "MainActivity::onPostExecute :: get item at position : " + itemAtPosition.name)
 
 
                     intent.putExtra("extra_address", itemAtPosition)
                     startActivity(intent)
 
+
+                }
                 /*
 
                     listView.adapter = adapter
@@ -319,12 +327,11 @@ class MainActivity : AppCompatActivity() {
 
 
                  */
-                }
         }
     }
 
 
-    private class  ViewHolder(view : View?) {
+    private class  ViewHolder(view: View?) {
         val address_name_txt: TextView
         val address_city_txt: TextView
         val address_city_2_txt: TextView
