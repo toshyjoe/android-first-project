@@ -10,7 +10,7 @@ import org.osmdroid.views.MapView
 import org.osmdroid.util.GeoPoint
 
 class DetailActivity : AppCompatActivity() {
-    private val TAG = MapActivity::class.java.simpleName
+    private val TAG = DetailActivity::class.java.simpleName
 
     //private val REQUEST_PERMISSIONS_REQUEST_CODE = 1
     lateinit var map: MapView
