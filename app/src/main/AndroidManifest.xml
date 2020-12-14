@@ -17,7 +17,6 @@
         <activity android:name=".Test"></activity>
         <activity android:name=".MapActivity" />
         <activity android:name=".DetailActivity" />
-        <activity android:name=".ListActivity" />
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

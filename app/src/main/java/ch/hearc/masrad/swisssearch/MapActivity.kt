@@ -1,4 +1,4 @@
- package ch.hearc.masrad.swisssearch
+package ch.hearc.masrad.swisssearch
 
 import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
