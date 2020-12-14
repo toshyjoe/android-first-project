@@ -34,9 +34,9 @@ class DetailActivity : AppCompatActivity() {
         controller.setZoom(9.5)
         controller.setCenter(mapPoint)
 
-        //val intent = intent
-        //val inputAddress: Address = intent.getSerializableExtra("sampleObject") as Address
-        //activity_detail_name_txt.text = inputAddress.name
+        val intent = intent
+        val inputAddress: Address = intent.getSerializableExtra("sampleObject") as Address
+        activity_detail_name_txt.text = inputAddress.name
 
 
     }

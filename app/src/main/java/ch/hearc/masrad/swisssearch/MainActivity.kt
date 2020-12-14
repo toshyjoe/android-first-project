@@ -296,6 +296,14 @@ class MainActivity : AppCompatActivity() {
                 listView.adapter = addressAdapter
                 listView.onItemClickListener = AdapterView.OnItemClickListener { adapterView, view, position, id ->
                     val intent = Intent(applicationContext, DetailActivity::class.java)
+                    val itemAtPosition : Address
+                    itemAtPosition =  adapterView.getItemAtPosition(position) as Address
+
+                    Log.i("TAG",
+                        "MainActivity::onPostExecute :: get item at position : " + itemAtPosition.name)
+
+
+                    intent.putExtra("extra_address", itemAtPosition)
                     startActivity(intent)
 
                 /*
