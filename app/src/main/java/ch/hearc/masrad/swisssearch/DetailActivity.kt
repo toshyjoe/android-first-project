@@ -3,6 +3,8 @@ package ch.hearc.masrad.swisssearch
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
+import com.google.android.gms.identity.intents.Address
+import com.google.android.gms.vision.barcode.Barcode
 import kotlinx.android.synthetic.main.activity_detail.*
 import org.osmdroid.config.Configuration
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory
@@ -21,6 +23,14 @@ class DetailActivity : AppCompatActivity() {
         setContentView(R.layout.activity_detail)
         Log.i("TAG", "DetailActivity")
 
+        val intent = intent
+        val inputAddress = intent.getParcelableExtra<Address>("extra_address")
+
+        if (inputAddress != null) {
+            activity_detail_name_txt.text = inputAddress.name
+        }
+
+
         var ctx = applicationContext
 
         Configuration.getInstance().load(ctx, androidx.preference.PreferenceManager.getDefaultSharedPreferences(ctx))
@@ -34,12 +44,6 @@ class DetailActivity : AppCompatActivity() {
         controller.setZoom(9.5)
         controller.setCenter(mapPoint)
 
-        val intent = intent
-        val inputAddress = intent.getParcelableExtra<Address>("extra_address")
-
-        if (inputAddress != null) {
-            activity_detail_name_txt.text = inputAddress.name
-        }
 
 
     }
