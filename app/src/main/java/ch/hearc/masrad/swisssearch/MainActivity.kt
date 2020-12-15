@@ -300,33 +300,8 @@ class MainActivity : AppCompatActivity() {
 
                     Log.i("TAG", "MainActivity::onPostExecute :: get item at position : " + itemAtPosition.name)
                     val intent = Intent(applicationContext, DetailActivity::class.java)
-                    //intent.putExtra("extra_address", "itemAtPosition")//parcelable
                     intent.putExtra("extra_address", itemAtPosition)
-                    /*
-                    val itemAtPosition : Address
-                    itemAtPosition =  adapterView.getItemAtPosition(position) as Address
-
-                    Log.i("TAG",
-                        "MainActivity::onPostExecute :: get item at position : " + itemAtPosition.name)
-
-
-                    intent.putExtra("extra_address", itemAtPosition)
-
-                     */
                     startActivity(intent)
-
-                /*
-
-                    listView.adapter = adapter
-                    listView.onItemClickListener = AdapterView.OnItemClickListener { parent, view, position, id ->
-                        Log.i("MainActivity", "index:")
-                        val intent = Intent(applicationContext, DetailActivity::class.java)
-                        //intent.putExtra("name",imagesNames[position])
-                        //intent.putExtra("image",imageIds[position])
-                        startActivity(intent)
-
-
-                 */
                 }
         }
     }

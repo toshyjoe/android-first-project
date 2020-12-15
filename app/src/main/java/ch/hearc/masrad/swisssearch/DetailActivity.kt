@@ -16,7 +16,6 @@ import org.osmdroid.util.GeoPoint
 class DetailActivity : AppCompatActivity() {
     private val TAG = DetailActivity::class.java.simpleName
 
-    //private val REQUEST_PERMISSIONS_REQUEST_CODE = 1
     lateinit var map: MapView
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -24,13 +23,9 @@ class DetailActivity : AppCompatActivity() {
         setContentView(R.layout.activity_detail)
         Log.i("TAG", "DetailActivity")
 
-
-
         val intent = intent
         val inputAddress = intent.getParcelableExtra<ch.hearc.masrad.swisssearch.Address>("extra_address")
         Log.i("TAG", "DetailActivity::inputAddress " + inputAddress?.street)
-
-
         if (inputAddress != null) {
           activity_detail_name_txt.text = inputAddress.name
         }
