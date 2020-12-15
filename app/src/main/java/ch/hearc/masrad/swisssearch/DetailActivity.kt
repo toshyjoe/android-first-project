@@ -24,8 +24,8 @@ class DetailActivity : AppCompatActivity() {
         Log.i("TAG", "DetailActivity")
 
         val intent = intent
-        //val inputAddress = intent.getParcelableExtra<Parcelable>("extra_address")
-        val inputAddress = intent.getExtra("extra_address")
+        val inputAddress = intent.getParcelableExtra<ch.hearc.masrad.swisssearch.Address>("extra_address")
+
 
 
         if (inputAddress != null) {
