@@ -3,6 +3,8 @@ package ch.hearc.masrad.swisssearch
 import android.os.Bundle
 import android.os.Parcelable
 import android.util.Log
+import android.widget.EditText
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.gms.identity.intents.Address
 import kotlinx.android.synthetic.main.activity_detail.*
@@ -17,19 +19,20 @@ class DetailActivity : AppCompatActivity() {
     //private val REQUEST_PERMISSIONS_REQUEST_CODE = 1
     lateinit var map: MapView
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_detail)
         Log.i("TAG", "DetailActivity")
 
+
+
         val intent = intent
         val inputAddress = intent.getParcelableExtra<ch.hearc.masrad.swisssearch.Address>("extra_address")
-        Log.i("TAG", "DetailActivity::inputAddress" + inputAddress?.street)
+        Log.i("TAG", "DetailActivity::inputAddress " + inputAddress?.street)
 
 
         if (inputAddress != null) {
-            activity_detail_name_txt.text = inputAddress.name
+          activity_detail_name_txt.text = inputAddress.name
         }
 
 

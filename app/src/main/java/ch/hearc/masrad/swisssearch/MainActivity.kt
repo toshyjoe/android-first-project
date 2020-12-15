@@ -300,7 +300,8 @@ class MainActivity : AppCompatActivity() {
 
                     Log.i("TAG", "MainActivity::onPostExecute :: get item at position : " + itemAtPosition.name)
                     val intent = Intent(applicationContext, DetailActivity::class.java)
-                    intent.putExtra("extra_address", "itemAtPosition")//parcelable
+                    //intent.putExtra("extra_address", "itemAtPosition")//parcelable
+                    intent.putExtra("extra_address", itemAtPosition)
                     /*
                     val itemAtPosition : Address
                     itemAtPosition =  adapterView.getItemAtPosition(position) as Address
