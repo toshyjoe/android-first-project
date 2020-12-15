@@ -1,8 +1,10 @@
 package ch.hearc.masrad.swisssearch
 
 import android.os.Bundle
+import android.os.Parcelable
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
+import com.google.android.gms.identity.intents.Address
 import kotlinx.android.synthetic.main.activity_detail.*
 import org.osmdroid.config.Configuration
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory
@@ -22,8 +24,9 @@ class DetailActivity : AppCompatActivity() {
         Log.i("TAG", "DetailActivity")
 
         val intent = intent
-        //val inputAddress = intent.getParcelableExtra<Address>("extra_address")
-        val inputAddress = intent.getParcelableExtra<Address>("extra_address")
+        //val inputAddress = intent.getParcelableExtra<Parcelable>("extra_address")
+        val inputAddress = intent.getExtra("extra_address")
+
 
         if (inputAddress != null) {
             activity_detail_name_txt.text = inputAddress.name

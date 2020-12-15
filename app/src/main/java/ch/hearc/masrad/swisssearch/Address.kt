@@ -2,8 +2,7 @@ package ch.hearc.masrad.swisssearch
 
 
 
-
-class Address(
+class Address (
     var id: Int?,
     var name: String?,
     var street: String?,
