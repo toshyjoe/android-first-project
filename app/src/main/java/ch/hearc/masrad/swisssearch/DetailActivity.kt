@@ -25,7 +25,7 @@ class DetailActivity : AppCompatActivity() {
 
         val intent = intent
         val inputAddress = intent.getParcelableExtra<ch.hearc.masrad.swisssearch.Address>("extra_address")
-
+        Log.i("TAG", "DetailActivity::inputAddress" + inputAddress?.street)
 
 
         if (inputAddress != null) {
