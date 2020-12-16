@@ -36,7 +36,7 @@ class DetailActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_detail)
 
-        test()
+
         search()
 
 
@@ -67,11 +67,7 @@ class DetailActivity : AppCompatActivity() {
 
     }
 
-    fun test (){
-        val test = "hello"
-        Log.i("TAG", "DetailActivity::test" + test )
 
-    }
     fun search (){
         Log.i("TAG", "DetailActivity::search")
         val downloadData = Download()
@@ -84,12 +80,14 @@ class DetailActivity : AppCompatActivity() {
             var geojson = "&format=geojson"
             val address = Address?.street.toString()
             downloadData.execute(url+address+geojson)
-            Log.i("TAG", "DetailActivity::downloadData " + url+address+geojson)
+            Log.i("TAG", "DetailActivity::search::address " + url+address+geojson)
         } catch (e: Exception){
             e.printStackTrace()
         }
 
     }
+
+
     inner class Download : AsyncTask<String, Void, String>() {
 
         override fun doInBackground(vararg p0: String?): String {
@@ -127,19 +125,22 @@ class DetailActivity : AppCompatActivity() {
             super.onPostExecute(result)
 
             try {
-
+                println("Download")
                 val jSONObject = JSONObject(result)
-                println(jSONObject)
-                val base = jSONObject.getString("base")
-                println(base)
-                val date = jSONObject.getString("date")
-                println(date)
-                val rates = jSONObject.getString("rates")
-                println(rates)
+                println("result " + jSONObject)
+                val features = jSONObject.getString("features")
+                println("features" + features)
+               // val date = jSONObject.getString("date")
+                //println(date)
+                //val rates = jSONObject.getString("rates")
+                //println(rates)
+                //data.cars['Nissan'][0].model
 
-                val newJsonObject = JSONObject(rates)
-                val chf = newJsonObject.getString("CHF")
-                println(chf)
+                val newJsonObject = jSONObject["features"][3]
+                println("newJsonObject " + newJsonObject)
+                //val geometry = newJsonObject.getString("geometry")
+                //println("geometry" + geometry)Curty
+
                 //val czk = newJsonObject.getString("CZK")
                 //val tl = newJsonObject.getString("TRY")
 
