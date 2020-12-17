@@ -128,16 +128,36 @@ class DetailActivity : AppCompatActivity() {
                 println("Download")
                 val jSONObject = JSONObject(result)
                 println("result " + jSONObject)
-                val features = jSONObject.getString("features")
-                println("features" + features)
-               // val date = jSONObject.getString("date")
-                //println(date)
+                val jString = jSONObject.getString("type")
+                println("getString " + jString)
+                val jArray =  jSONObject.getJSONArray("features")
+                //val features = jSONObject.getString("features")
+                println("jArray" + jArray)
+
+                //val values = features.get(0)
+                //val values = jSONObject.getJSONArray("features")
+                val x = jArray.getJSONObject(0)
+                println("jArray" + x)
+
+                val y = x.getJSONObject("geometry")
+                println("jArray" + y)
+
+                val z = y.getJSONArray("coordinates")
+                println("jArray" + z)
+
+                val lat = z.getDouble(0)
+                println("jArray" + lat)
+
+                val long = z.getDouble(1)
+                println("jArray" + long)
+
+
                 //val rates = jSONObject.getString("rates")
                 //println(rates)
                 //data.cars['Nissan'][0].model
 
-                val newJsonObject = jSONObject["features"][3]
-                println("newJsonObject " + newJsonObject)
+                //val newJsonObject = jSONObject["features"][3]
+                //println("newJsonObject " + newJsonObject)
                 //val geometry = newJsonObject.getString("geometry")
                 //println("geometry" + geometry)Curty
 
