@@ -50,18 +50,7 @@ class DetailActivity : AppCompatActivity() {
         }
 
 
-        var ctx = applicationContext
 
-        Configuration.getInstance().load(ctx, androidx.preference.PreferenceManager.getDefaultSharedPreferences(ctx))
-        map = findViewById(R.id.map)
-        map.setTileSource(TileSourceFactory.MAPNIK)
-
-        val controller = map.controller
-
-        val mapPoint = GeoPoint(46.99783873042332, 6.938756785005269)
-
-        controller.setZoom(9.5)
-        controller.setCenter(mapPoint)
 
 
 
@@ -145,11 +134,25 @@ class DetailActivity : AppCompatActivity() {
                 val z = y.getJSONArray("coordinates")
                 println("jArray" + z)
 
-                val lat = z.getDouble(0)
+                val long: Double = z.getDouble(0)
+                println("jArray" + long)
+
+                val lat: Double = z.getDouble(1)
                 println("jArray" + lat)
 
-                val long = z.getDouble(1)
-                println("jArray" + long)
+                var ctx = applicationContext
+
+                Configuration.getInstance().load(ctx, androidx.preference.PreferenceManager.getDefaultSharedPreferences(ctx))
+                map = findViewById(R.id.map)
+                map.setTileSource(TileSourceFactory.MAPNIK)
+
+                val controller = map.controller
+
+                val mapPoint = GeoPoint(lat, long)
+
+                controller.setZoom(18.5)
+                controller.setCenter(mapPoint)
+
 
 
                 //val rates = jSONObject.getString("rates")
