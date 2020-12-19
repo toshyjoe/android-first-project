@@ -1,6 +1,7 @@
 package ch.hearc.masrad.swisssearch
 
 import android.content.Intent
+import android.net.Uri
 import android.os.AsyncTask
 import android.os.Bundle
 import android.os.Parcelable
@@ -9,6 +10,7 @@ import android.util.Xml
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
+import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
@@ -37,10 +39,33 @@ class DetailActivity : AppCompatActivity() {
 
     lateinit var map: MapView
 
+    lateinit var dButtonCall: Button
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_detail)
+
+
+        dButtonCall =  findViewById<Button>(R.id.activity_detail_call_btn)
+
+        dButtonCall.setOnClickListener {
+
+                val intent = Intent(Intent.ACTION_DIAL)
+                intent.data = Uri.parse("tel:1234566")
+                startActivity(intent)
+
+        }
+
+
+        fun onClick(v: View){
+            val intent = Intent(Intent.ACTION_DIAL)
+            intent.setData(Uri.parse("tel:1234566"))
+            startActivity(intent)
+
+        }
+
+
 
 
         search()
