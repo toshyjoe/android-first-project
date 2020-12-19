@@ -7,11 +7,13 @@ import android.os.Parcelable
 import android.util.Log
 import android.util.Xml
 import android.view.View
+import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.EditText
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.gms.identity.intents.Address
+import com.google.android.gms.nearby.messages.internal.ClientAppContext
 import kotlinx.android.synthetic.main.activity_detail.*
 import kotlinx.android.synthetic.main.activity_main.*
 import org.json.JSONObject
@@ -19,6 +21,9 @@ import org.osmdroid.config.Configuration
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory
 import org.osmdroid.views.MapView
 import org.osmdroid.util.GeoPoint
+import org.osmdroid.views.overlay.ItemizedIconOverlay
+import org.osmdroid.views.overlay.ItemizedOverlayWithFocus
+import org.osmdroid.views.overlay.OverlayItem
 import org.xmlpull.v1.XmlPullParser
 import org.xmlpull.v1.XmlPullParserException
 import java.io.IOException
@@ -31,6 +36,7 @@ class DetailActivity : AppCompatActivity() {
     private val TAG = DetailActivity::class.java.simpleName
 
     lateinit var map: MapView
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -153,9 +159,27 @@ class DetailActivity : AppCompatActivity() {
                 controller.setZoom(18.5)
                 controller.setCenter(mapPoint)
 
+                var items = ArrayList<OverlayItem>()
+
+                items.add(OverlayItem("resto", "chez",GeoPoint(lat,long)))
+
+                var mOverlay = ItemizedOverlayWithFocus<OverlayItem>(getApplicationContext(), items,
+                    object: ItemizedIconOverlay.OnItemGestureListener<OverlayItem> {
+                        override fun onItemSingleTapUp(index:Int, item:OverlayItem):Boolean {
+                            return false
+                        }
+                        override fun onItemLongPress(index:Int, item:OverlayItem):Boolean {
+                            return false
+                        }
+                    })
+
+                mOverlay.setFocusItemsOnTap(true)
+                map.overlays.add(mOverlay)
 
 
-                //val rates = jSONObject.getString("rates")
+
+
+                    //val rates = jSONObject.getString("rates")
                 //println(rates)
                 //data.cars['Nissan'][0].model
 
@@ -177,5 +201,9 @@ class DetailActivity : AppCompatActivity() {
             }
         }
     }
+
+
+
+
 }
 
