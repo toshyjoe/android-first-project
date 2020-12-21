@@ -58,15 +58,6 @@ class DetailActivity : AppCompatActivity() {
         }
 
 
-        fun onClick(v: View){
-            val intent = Intent(Intent.ACTION_DIAL)
-            intent.setData(Uri.parse("tel:1234566"))
-            startActivity(intent)
-
-        }
-
-
-
 
         search()
 
@@ -78,6 +69,9 @@ class DetailActivity : AppCompatActivity() {
         Log.i("TAG", "DetailActivity::inputAddress " + inputAddress?.street)
         if (inputAddress != null) {
           activity_detail_name_txt.text = inputAddress.name
+            activity_detail_street_txt.text = inputAddress.street + " " + inputAddress.streetNo
+            activity_detail_city_txt.text = inputAddress.zip + " " + inputAddress.city
+            activity_detail_phoneNumber_txt.text = inputAddress.phoneNumber
         }
 
 
