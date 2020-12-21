@@ -41,10 +41,14 @@ class DetailActivity : AppCompatActivity() {
 
     lateinit var dButtonCall: Button
 
+    lateinit var inputAddress: ch.hearc.masrad.swisssearch.Address
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_detail)
+
+        val inputAddress = intent.getParcelableExtra<ch.hearc.masrad.swisssearch.Address>("extra_address")
 
 
         dButtonCall =  findViewById<Button>(R.id.activity_detail_call_btn)
@@ -52,7 +56,7 @@ class DetailActivity : AppCompatActivity() {
         dButtonCall.setOnClickListener {
 
                 val intent = Intent(Intent.ACTION_DIAL)
-                intent.data = Uri.parse("tel:1234566")
+                intent.data = Uri.parse("tel:" + inputAddress?.phoneNumber.toString())
                 startActivity(intent)
 
         }
@@ -65,7 +69,6 @@ class DetailActivity : AppCompatActivity() {
         Log.i("TAG", "DetailActivity")
 
         val intent = intent
-        val inputAddress = intent.getParcelableExtra<ch.hearc.masrad.swisssearch.Address>("extra_address")
         Log.i("TAG", "DetailActivity::inputAddress " + inputAddress?.street)
         if (inputAddress != null) {
           activity_detail_name_txt.text = inputAddress.name
