@@ -4,20 +4,10 @@ import android.content.Intent
 import android.net.Uri
 import android.os.AsyncTask
 import android.os.Bundle
-import android.os.Parcelable
 import android.util.Log
-import android.util.Xml
-import android.view.View
-import android.view.ViewGroup
-import android.widget.AdapterView
 import android.widget.Button
-import android.widget.EditText
-import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import com.google.android.gms.identity.intents.Address
-import com.google.android.gms.nearby.messages.internal.ClientAppContext
 import kotlinx.android.synthetic.main.activity_detail.*
-import kotlinx.android.synthetic.main.activity_main.*
 import org.json.JSONObject
 import org.osmdroid.config.Configuration
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory
@@ -26,10 +16,6 @@ import org.osmdroid.util.GeoPoint
 import org.osmdroid.views.overlay.ItemizedIconOverlay
 import org.osmdroid.views.overlay.ItemizedOverlayWithFocus
 import org.osmdroid.views.overlay.OverlayItem
-import org.xmlpull.v1.XmlPullParser
-import org.xmlpull.v1.XmlPullParserException
-import java.io.IOException
-import java.io.InputStream
 import java.io.InputStreamReader
 import java.net.HttpURLConnection
 import java.net.URL
@@ -50,7 +36,6 @@ class DetailActivity : AppCompatActivity() {
 
         val inputAddress = intent.getParcelableExtra<ch.hearc.masrad.swisssearch.Address>("extra_address")
 
-
         dButtonCall =  findViewById<Button>(R.id.activity_detail_call_btn)
 
         dButtonCall.setOnClickListener {
@@ -61,10 +46,7 @@ class DetailActivity : AppCompatActivity() {
 
         }
 
-
-
         search()
-
 
         Log.i("TAG", "DetailActivity")
 
@@ -77,11 +59,6 @@ class DetailActivity : AppCompatActivity() {
             activity_detail_phoneNumber_txt.text = inputAddress.phoneNumber
         }
 
-
-
-
-
-
     }
 
 
@@ -89,9 +66,6 @@ class DetailActivity : AppCompatActivity() {
         Log.i("TAG", "DetailActivity::search")
         val downloadData = Download()
         try {
-            //val key = "&key=920b2b17d1aca9724a94b8799a2d8bec"
-            //val key = "&key=139e1566337f93a78344eec754ce94ca"
-            //https://nominatim.openstreetmap.org/search?q=17+Strada+Pictor+Alexandru+Romano%2C+Bukarest&format=geojson
             val Address = intent.getParcelableExtra<ch.hearc.masrad.swisssearch.Address>("extra_address")
             val url = "https://nominatim.openstreetmap.org/search?q="
             var geojson = "&format=geojson"
@@ -148,11 +122,9 @@ class DetailActivity : AppCompatActivity() {
                 val jString = jSONObject.getString("type")
                 println("getString " + jString)
                 val jArray =  jSONObject.getJSONArray("features")
-                //val features = jSONObject.getString("features")
+
                 println("jArray" + jArray)
 
-                //val values = features.get(0)
-                //val values = jSONObject.getJSONArray("features")
                 val x = jArray.getJSONObject(0)
                 println("jArray" + x)
 
@@ -199,23 +171,6 @@ class DetailActivity : AppCompatActivity() {
                 map.overlays.add(mOverlay)
 
 
-
-
-                    //val rates = jSONObject.getString("rates")
-                //println(rates)
-                //data.cars['Nissan'][0].model
-
-                //val newJsonObject = jSONObject["features"][3]
-                //println("newJsonObject " + newJsonObject)
-                //val geometry = newJsonObject.getString("geometry")
-                //println("geometry" + geometry)Curty
-
-                //val czk = newJsonObject.getString("CZK")
-                //val tl = newJsonObject.getString("TRY")
-
-                //chfText.text = "CHF: " + chf
-                //czkText.text = "CZK: " + czk
-                //tryText.text = "TRY: " + tl
             } catch (e: Exception) {
 
                 e.printStackTrace()
