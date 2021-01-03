@@ -62,6 +62,7 @@ class DetailActivity : AppCompatActivity() {
     }
 
 
+
     fun search (){
         Log.i("TAG", "DetailActivity::search")
         val downloadData = Download()

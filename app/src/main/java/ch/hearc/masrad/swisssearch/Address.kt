@@ -14,4 +14,6 @@ data class Address (
     var phoneNumber: String?,
     var zip: String?,
     var city: String?
+
 ) : Parcelable
+
