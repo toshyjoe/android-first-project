@@ -35,8 +35,6 @@ class MainActivity : AppCompatActivity() {
     private lateinit var mSearchButton: Button
 
 
-
-
     inner class AddressAdapter : BaseAdapter {
 
         private var addressList = ArrayList<Address>()
@@ -48,9 +46,7 @@ class MainActivity : AppCompatActivity() {
         }
 
 
-
         override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View? {
-
 
             val view: View?
             val vh: ViewHolder
@@ -70,7 +66,7 @@ class MainActivity : AppCompatActivity() {
             vh.address_name_txt.text = addressList[position].name
             vh.address_city_txt.text = addressList[position].street + " " + addressList[position].streetNo
             vh.address_city_2_txt.text = addressList[position].zip + " " + addressList[position].city
-                    return view
+            return view
 
         }
 
@@ -96,10 +92,8 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         Log.i("TAG", "MainActivity::onCreate")
 
-
         mNameInput = findViewById<EditText>(R.id.activity_main_name_input)
         mSearchButton =  findViewById<Button>(R.id.activity_main_search_btn)
-
 
         mNameInput.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
@@ -135,14 +129,12 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    //data class Entry(val title: String?, val phoneNumber: String?)
     data class Entry(val title: String?)
 
 
 
     inner class Download : AsyncTask<String, Void, String>() {
 
-        //var listNames = ArrayList<String>()
         var listAddresses = ArrayList<Address>()
 
 
@@ -163,17 +155,14 @@ class MainActivity : AppCompatActivity() {
 
         @Throws(IOException::class, XmlPullParserException::class)
         fun readText(parser: XmlPullParser): String {
-            //Log.i("TAG", "MainActivity::doInBackground => readText ")
 
             var result: String = ""
             if (parser.next() == XmlPullParser.TEXT) {
                 result = parser.text
-                //listNames.add(parser.text)
                 Log.i("TAG", "MainActivity::doInBackground => readText var " + result)
                 parser.nextTag()
             }
-            //return result
-            //Log.i("TAG", "MainActivity::doInBackground => readText listName " + listNames)
+
             return result
 
         }
@@ -218,9 +207,8 @@ class MainActivity : AppCompatActivity() {
                 }
 
                 Log.i("TAG", "MainActivity::doInBackground => readEntry::parse::when " + title)
-                //Log.i("TAG", "MainActivity::doInBackground => readEntry::parse::when readPhone :::::::: "  + phone)
             }
-            //return Entry(title, phone)
+
             newAddress = Address(1, title, street, streetNo, phone, zip, city)
             listAddresses.add(newAddress)
             Log.i("TAG",
@@ -275,7 +263,6 @@ class MainActivity : AppCompatActivity() {
 
             var url: URL
             val httpURLConnection: HttpURLConnection
-            // récupérer l'url dans le tableau de paramètres p0 reçu
             url = URL(p0[0])
             Log.i("TAG", "MainActivity::doInBackground => url " + url)
             httpURLConnection = url.openConnection() as HttpURLConnection
@@ -293,42 +280,20 @@ class MainActivity : AppCompatActivity() {
 
             Log.i("TAG", "MainActivity::onPostExecute ")
 
-
-                //val adapter = ArrayAdapter<String>(this@MainActivity,android.R.layout.simple_expandable_list_item_1, listNames)
-
                 val addressAdapter = AddressAdapter(this@MainActivity, listAddresses)
 
                 listView.adapter = addressAdapter
                 listView.onItemClickListener = AdapterView.OnItemClickListener { adapterView, view, position, id ->
 
-
-                    val intent = Intent(applicationContext, DetailActivity::class.java)
-
                     val itemAtPosition : Address
                     itemAtPosition =  adapterView.getItemAtPosition(position) as Address
 
-                    Log.i("TAG",
-                        "MainActivity::onPostExecute :: get item at position : " + itemAtPosition.name)
-
-
+                    Log.i("TAG", "MainActivity::onPostExecute :: get item at position : " + itemAtPosition.name)
+                    val intent = Intent(applicationContext, DetailActivity::class.java)
                     intent.putExtra("extra_address", itemAtPosition)
-
                     startActivity(intent)
-
-
                 }
-                /*
 
-                    listView.adapter = adapter
-                    listView.onItemClickListener = AdapterView.OnItemClickListener { parent, view, position, id ->
-                        Log.i("MainActivity", "index:")
-                        val intent = Intent(applicationContext, DetailActivity::class.java)
-                        //intent.putExtra("name",imagesNames[position])
-                        //intent.putExtra("image",imageIds[position])
-                        startActivity(intent)
-
-
-                 */
         }
     }
 
@@ -345,6 +310,5 @@ class MainActivity : AppCompatActivity() {
         }
     }
 }
-
 
 
